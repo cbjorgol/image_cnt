@@ -203,6 +203,8 @@ class SeaLionData(object):
         src_img = np.asarray(self.load_train_image(train_id, mask=True), dtype=np.float)
         dot_img = np.asarray(self.load_dotted_image(train_id), dtype=np.float)
 
+        self.src_img = src_img
+
         img_diff = np.abs(src_img - dot_img)
 
         # Detect bad data. If train and dotted images are very different then somethings wrong.

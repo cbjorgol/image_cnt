@@ -13,6 +13,7 @@ SeaLionCoord = namedtuple('SeaLionCoord', ['tid', 'cls', 'x', 'y'])
 
 # Count sea lion dots and compare to truth from train.csv
 sld = SeaLionData(SOURCEDIR, DATADIR, VERBOSITY.NORMAL)
-for tid in sld.train_ids[:10]:
+for tid in sld.train_ids:
+    print(tid,)
     coord = sld.coords(tid)
     sld.save_sea_lion_chunks(coord, '../output', chunksize=128)
