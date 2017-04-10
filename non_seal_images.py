@@ -75,11 +75,10 @@ def show_nonseal_images(noseal_coords, start):
             n+=1
     plt.show()
 
+if __name__ == '__main__':
 
-# Count sea lion dots and compare to truth from train.csv
-sld = SeaLionData(SOURCEDIR, DATADIR, VERBOSITY.NORMAL)
+    sld = SeaLionData(SOURCEDIR, DATADIR, VERBOSITY.NORMAL)
 
-for tid in sld.train_ids:
-    noseal_coords = get_noseal_locs(sld, tid, 150)
-    save_noseal_chunks(sld, tid, noseal_coords, '../cropped_nonseals')
-
+    for tid in sld.train_ids:
+        noseal_coords = get_noseal_locs(sld, tid, 150)
+        save_noseal_chunks(sld, tid, noseal_coords, '../cropped_nonseals')
