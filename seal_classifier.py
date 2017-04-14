@@ -1,7 +1,5 @@
 import os
 import glob
-import shutil
-import json
 import pylab
 import numpy as np
 from keras.applications.vgg16 import VGG16
@@ -11,11 +9,6 @@ from keras.layers.normalization import BatchNormalization
 from keras.models import Model
 from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
-from keras.utils.visualize_util import plot
-from scipy.misc import imread, imsave, imresize
-from sklearn.cluster import DBSCAN
-from sklearn.model_selection import GroupShuffleSplit
-
 
 def init_model(cfg, target_num=4, FC_block_num=2, FC_feature_dim=512, dropout_ratio=0.5, learning_rate=0.0001):
     # Get the input tensor

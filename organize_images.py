@@ -116,6 +116,9 @@ def great_migration(cfg, remove_existing=False, floodgate=None):
 
     if cfg.TRAIN_PCT < 1.:
         n_test_files = sum([len(files) for r, d, files in os.walk(cfg.CROP_TEST_DIR)])
+    else:
+        n_test_files = 0
+
     n_result_imgs = n_test_files + n_train_files
 
     if floodgate is None:
