@@ -12,11 +12,6 @@ VERBOSITY = namedtuple('VERBOSITY', ['QUITE', 'NORMAL', 'VERBOSE', 'DEBUG'])(0, 
 SeaLionCoord = namedtuple('SeaLionCoord', ['tid', 'cls', 'x', 'y'])
 
 
-for train_dir in ['TrainDotted', 'Train', 'Test']:
-    assert os.path.exists(os.path.join(SOURCEDIR, 'TrainDotted'))
-
-if not os.path.exists(DATADIR):
-    os.mkdir(DATADIR)
 
 def crop_seals(sld, tids):
     # Count sea lion dots and compare to truth from train.csv
@@ -48,6 +43,12 @@ def multiprocess_crop_seals(sld, nthreads=1):
         t.start()
 
 if __name__ == '__main__':
+
+    for train_dir in ['TrainDotted', 'Train', 'Test']:
+        assert os.path.exists(os.path.join(SOURCEDIR, 'TrainDotted'))
+
+    if not os.path.exists(DATADIR):
+        os.mkdir(DATADIR)
 
     sld = SeaLionData(SOURCEDIR, DATADIR, VERBOSITY.QUITE)
     multiprocess_crop_seals(sld=sld, nthreads=30)
