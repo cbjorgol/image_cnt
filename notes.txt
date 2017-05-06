@@ -1,0 +1,12 @@
+nvidia-381 doesn't have libcuda.so.1 which is critical for theano and tensorflow
+
+To fix this, the key was to install nvidia-378 which was compatible with the 1080 ti
+
+echo $LD_LIBRARY_PATH
+/usr/local/cuda-8.0/lib64
+
+
+echo $PATH
+/home/cbjorgol/anaconda3/envs/py35/bin:/usr/local/cuda-8.0/bin:/home/cbjorgol/anaconda3/bin:/home/cbjorgol/bin:/home/cbjorgol/.local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+
+

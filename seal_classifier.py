@@ -9,6 +9,7 @@ from keras.layers.normalization import BatchNormalization
 from keras.models import Model
 from keras.optimizers import Adam
 from keras.preprocessing.image import ImageDataGenerator
+import config as cfg
 
 def init_model(cfg, target_num=4, FC_block_num=2, FC_feature_dim=512, dropout_ratio=0.5, learning_rate=0.0001):
     # Get the input tensor
@@ -30,7 +31,9 @@ def init_model(cfg, target_num=4, FC_block_num=2, FC_feature_dim=512, dropout_ra
 
     # Define and compile the model
     model = Model(input_tensor, output_tensor)
-    model.compile(optimizer=Adam(lr=learning_rate), loss="mse")
+    # model.compile(optimizer=Adam(lr=learning_rate), loss="mse")
+
+    model.compile(optimizer=Adam(lr=learning_rate), loss="binary_crossentropy")
     # plot(model, to_file=os.path.join(MODEL_PATH, "model.png"), show_shapes=True, show_layer_names=True)
 
     return model
@@ -91,59 +94,17 @@ def fit_model(cfg, train_generator, valid_generator, train_sample_num=1000, vali
 
 
 if __name__ == '__main__':
-    import config as cfg
-
-    # MODEL_PATH = '../models'
-    # IMAGE_ROW_SIZE = 128
-    # IMAGE_COLUMN_SIZE = IMAGE_ROW_SIZE
-    # TRAIN_SEAL_FOLDER_PATH = os.path.join('..', 'train_byclass')
-    # TRAIN_NONSEAL_FOLDER_PATH = os.path.join('..', 'cropped_nonseals')
-    # BATCH_SIZE = cfg.BATCH_SIZE
 
 
-    train_generator_object = ImageDataGenerator(
-        rotation_range=45,
-        width_shift_range=0.05,
-        height_shift_range=0.05,
-        shear_range=0.05,
-        zoom_range=0.2,
-        horizontal_flip=True,
-        vertical_flip=True,
-        rescale=1.0 / 255)
 
-    test_generator_object = ImageDataGenerator(
-        rotation_range=45,
-        width_shift_range=0.05,
-        height_shift_range=0.05,
-        shear_range=0.05,
-        zoom_range=0.2,
-        horizontal_flip=True,
-        vertical_flip=True,
-        rescale=1.0 / 255)
+    train_generator_object = ImageDataGenerator(**cfg.GEN_OBJ_KWARGS)
+    test_generator_object = ImageDataGenerator(**cfg.GEN_OBJ_KWARGS)
 
-    train_generator = train_generator_object.flow_from_directory(
-        directory=cfg.CROP_TRAIN_DIR,
-        target_size=(cfg.IMAGE_ROW_SIZE, cfg.IMAGE_COLUMN_SIZE),
-        color_mode='rgb',
-        classes=[cfg.CLASS_LOOKUP[key] for key in sorted(cfg.CLASS_LOOKUP.keys())],
-        class_mode='categorical',
-        batch_size=cfg.BATCH_SIZE,
-        shuffle=True,
-        seed=cfg.SEED)
+    train_generator = train_generator_object.flow_from_directory(directory=cfg.CROP_TRAIN_DIR, **cfg.GEN_KWARGS)
+    valid_generator = test_generator_object.flow_from_directory(directory=cfg.CROP_TEST_DIR, **cfg.GEN_KWARGS)
 
-    valid_generator = test_generator_object.flow_from_directory(
-        directory=cfg.CROP_TEST_DIR,
-        target_size=(cfg.IMAGE_ROW_SIZE, cfg.IMAGE_COLUMN_SIZE),
-        color_mode='rgb',
-        classes=[cfg.CLASS_LOOKUP[key] for key in sorted(cfg.CLASS_LOOKUP.keys())],
-        class_mode='categorical',
-        batch_size=cfg.BATCH_SIZE,
-        shuffle=True,
-        seed=cfg.SEED)
 
-    num_batches = cfg.TOTAL_BATCHES
-
-    print('Train Samples:', num_batches*cfg.BATCH_SIZE)
+    print('Train Samples:', cfg.TOTAL_BATCHES*cfg.BATCH_SIZE)
     fit_model(cfg, train_generator, valid_generator,
-              train_sample_num=cfg.BATCH_SIZE * num_batches,
-              valid_sample_num=cfg.BATCH_SIZE * num_batches)
+              train_sample_num=cfg.BATCH_SIZE * cfg.TOTAL_BATCHES,
+              valid_sample_num=cfg.BATCH_SIZE * cfg.TOTAL_BATCHES)

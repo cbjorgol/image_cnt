@@ -23,6 +23,8 @@ def migrate_seals(cfg, img_dir, seals, train_size=1., floodgate=None, linelen=12
     -------
     None
     """
+
+    print("Moving seals from {} to {} and {}".format(img_dir, cfg.CROP_TEST_DIR, cfg.CROP_TRAIN_DIR))
     seal_i = -1
     train_n = 0
     test_n = 0
